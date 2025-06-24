@@ -1,4 +1,4 @@
-import { IProduct } from "../models/product";
+import { IProduct, ProductCreatePayload } from "../models/product";
 import axiosClient from "./axios-client";
 
 export const getProducts = async (params?: {
@@ -15,7 +15,7 @@ export const getProduct = async (id: number): Promise<IProduct> => {
   return response.data;
 };
 
-export const createProduct = async (product: Omit<IProduct, "id">): Promise<IProduct> => {
+export const createProduct = async (product: ProductCreatePayload): Promise<IProduct> => {
   const response = await axiosClient.post("/products", product);
   return response.data;
 };

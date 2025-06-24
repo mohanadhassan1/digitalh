@@ -10,27 +10,33 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (
-          credentials?.email === "admin@example.com" &&
-          credentials.password === "password123"
-        ) {
-          return {
+        const users = [
+          {
             id: "1",
             email: "admin@example.com",
+            password: "admin123",
             name: "Admin User",
-            role: "admin" as const,
-          };
-        }
-
-        if (
-          credentials?.email === "user@example.com" &&
-          credentials.password === "password123"
-        ) {
-          return {
+            role: "admin",
+          },
+          {
             id: "2",
             email: "user@example.com",
+            password: "user123",
             name: "Regular User",
-            role: "user" as const,
+            role: "user",
+          },
+        ];
+        const user = users.find(
+          (u) => 
+            u.email === credentials?.email && 
+            u.password === credentials?.password
+        );
+        if (user) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
           };
         }
         return null;
@@ -39,7 +45,6 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
-    error: "/login",
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -52,7 +57,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.role = token.role as "admin";
+        session.user.role = token.role;
       }
       return session;
     },

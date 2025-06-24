@@ -14,6 +14,10 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  if (session.user.role !== "admin") {
+    redirect("/unauthorized");
+  }
+  
   return (
     <div className="min-h-screen">
       <Navbar />

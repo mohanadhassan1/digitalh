@@ -3,16 +3,14 @@ export interface IProduct {
   title: string;
   price: number;
   description: string;
-  category: Category;
+  category: {
+    id: number;
+    name: string;
+    image: string;
+    creationAt?: string;
+    updatedAt?: string;
+  };
   images: string[];
-  creationAt?: string;
-  updatedAt?: string;
-}
-
-export interface Category {
-  id: number;
-  name: string;
-  image: string;
   creationAt?: string;
   updatedAt?: string;
 }
@@ -22,11 +20,11 @@ export interface ProductFormValues {
   price: number;
   description: string;
   categoryId: number;
-  images?: string[];
+  images: string[];
 }
 
 export type ProductCreatePayload = Omit<ProductFormValues, "id">;
-export type ProductUpdatePayload = Partial<ProductFormValues>;
+export type ProductUpdatePayload = Partial<ProductCreatePayload>;
 
 export interface ProductQueryParams {
   title?: string;

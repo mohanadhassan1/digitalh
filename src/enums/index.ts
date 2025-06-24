@@ -15,4 +15,5 @@ export enum PRODUCT {
   PRICE = 'price',
   DESCRIPTION = 'description',
   CATEGORY_ID = 'categoryId',
+  IMAGES = 'images',
 }

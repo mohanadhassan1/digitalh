@@ -88,8 +88,8 @@ export default function LoginPage() {
 
         <div className="mt-4 text-sm text-gray-600">
           <p>Demo credentials:</p>
-          <p>Admin: admin@example.com / password123</p>
-          <p>User: user@example.com / password123</p>
+          <p>Admin: admin@example.com / admin123</p>
+          <p>User: user@example.com / user123</p>
         </div>
       </div>
     </div>
