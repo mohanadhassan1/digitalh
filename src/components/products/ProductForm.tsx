@@ -25,7 +25,7 @@ export function ProductForm() {
   const { updateProduct, isUpdating } = useUpdateProduct();
   const { data: categories = [], isLoading: isLoadingCategories } = useCategories();
 
-  const { register, handleSubmit, formState: { errors }, reset, watch, setValue, getValues, control } = useForm<ProductFormValues>({
+  const { register, handleSubmit, formState: { errors }, reset, watch, setValue, getValues } = useForm<ProductFormValues>({
     resolver: zodResolver(productSchema()),
     defaultValues: {
       title: "",

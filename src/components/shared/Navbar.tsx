@@ -11,7 +11,7 @@ export function Navbar() {
   return (
     <nav className="border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/products" className="font-bold">
+        <Link href="/" className="font-bold">
           DigtalH
         </Link>
         <div className="flex items-center gap-4">

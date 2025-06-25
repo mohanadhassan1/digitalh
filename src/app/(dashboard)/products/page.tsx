@@ -5,8 +5,18 @@ import { ProductForm } from "@/components/products/ProductForm";
 import { ViewDialog } from "@/components/products/ViewDialog";
 import { DeleteDialog } from "@/components/products/DeleteDialog";
 
-export function generateMetadata({ searchParams }: ProductsPageProps) {
-  const searchQuery = searchParams.search as string;
+
+interface ProductsPageProps {
+  searchParams: { 
+    [key: string]: string | string[] | undefined;
+    search?: string;
+    page?: string;
+  };
+}
+
+export async function generateMetadata({ searchParams }: ProductsPageProps) {
+  const resolvedSearchParams = await searchParams;
+  const searchQuery = resolvedSearchParams.search as string;
   
   return {
     title: searchQuery 
@@ -18,19 +28,11 @@ export function generateMetadata({ searchParams }: ProductsPageProps) {
   };
 }
 
-interface ProductsPageProps {
-  searchParams: { 
-    [key: string]: string | string[] | undefined;
-    search?: string;
-    page?: string;
-  };
-}
-
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
   const queryClient = new QueryClient();
-
-  const searchQuery = searchParams.search as string | undefined;
-  const page = parseInt((searchParams.page as string) || "1");
+  const resolvedSearchParams = await searchParams;
+  const searchQuery = resolvedSearchParams.search as string | undefined;
+  const page = parseInt((resolvedSearchParams.page as string) || "1");
   const limit = 10;
   const offset = (page - 1) * limit;
 

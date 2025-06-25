@@ -7,23 +7,63 @@ export const getProducts = async (params?: {
   limit?: number;
 }): Promise<{ data: IProduct[]; total: number }> => {
   try {
-    const response = await axiosClient.get("/products", { 
-      params: {
-        ...params,
-        sortBy: 'creationAt',
-        sortOrder: 'desc'
-      }
-    });
+    const totalResponse = await axiosClient.get("/products");
+    const allProducts = totalResponse.data;
 
-    const sortedData = [...response.data].sort((a, b) => {
+    let filteredProducts = allProducts;
+    if (params?.title) {
+      filteredProducts = allProducts.filter((product: IProduct) =>
+        product.title.toLowerCase().includes(params.title!.toLowerCase())
+      );
+    }
+
+    filteredProducts.sort((a: IProduct, b: IProduct) => {
       const dateA = a.creationAt ? new Date(a.creationAt).getTime() : 0;
       const dateB = b.creationAt ? new Date(b.creationAt).getTime() : 0;
       return dateB - dateA;
     });
 
+    const offset = params?.offset || 0;
+    const limit = params?.limit || 10;
+    const paginatedData = filteredProducts.slice(offset, offset + limit);
+
     return {
-      data: sortedData,
-      total: response.headers['x-total-count'] || sortedData.length
+      data: paginatedData,
+      total: filteredProducts.length
+    };
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    throw error;
+  }
+};
+
+export const getProductsPaginated = async (params?: {
+  title?: string;
+  offset?: number;
+  limit?: number;
+}): Promise<{ data: IProduct[]; total: number }> => {
+  try {
+    if (params?.title) {
+      return getProducts(params);
+    }
+
+    const response = await axiosClient.get("/products", { 
+      params: {
+        offset: params?.offset || 0,
+        limit: params?.limit || 10,
+      }
+    });
+
+    const currentPage = Math.floor((params?.offset || 0) / (params?.limit || 10)) + 1;
+    const hasMoreData = response.data.length === (params?.limit || 10);
+    
+    const estimatedTotal = hasMoreData 
+      ? (currentPage * (params?.limit || 10)) + 1
+      : (params?.offset || 0) + response.data.length;
+
+    return {
+      data: response.data,
+      total: estimatedTotal
     };
   } catch (error) {
     console.error('Error fetching products:', error);

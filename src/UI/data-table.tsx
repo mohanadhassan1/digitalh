@@ -1,10 +1,10 @@
 "use client";
 
+import * as React from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import {
@@ -15,51 +15,49 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import Button from "./Button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  totalCount: number;
-  pageSize: number;
+  totalCount?: number;
+  pageSize?: number;
+  currentPage?: number;
+  onPageChange?: (page: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  pageSize,
   totalCount = 0,
+  pageSize = 10,
+  currentPage = 1,
+  onPageChange,
 }: DataTableProps<TData, TValue>) {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const page = parseInt(searchParams.get('page') || '1');
-
-  const [pagination, setPagination] = useState({
-    pageIndex: page - 1,
-    pageSize,
-  });
-
-
   const table = useReactTable({
     data,
     columns,
-    pageCount: Math.ceil(totalCount / pageSize),
-    state: {
-      pagination,
-    },
-    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
+    pageCount: Math.ceil(totalCount / pageSize),
   });
 
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    params.set('page', String(pagination.pageIndex + 1));
-    router.replace(`?${params.toString()}`);
-  }, [pagination.pageIndex, router, searchParams]);
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const hasPreviousPage = currentPage > 1;
+  const hasNextPage = currentPage < totalPages;
+
+  const handlePreviousPage = () => {
+    if (hasPreviousPage && onPageChange) {
+      onPageChange(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (hasNextPage && onPageChange) {
+      onPageChange(currentPage + 1);
+    }
+  };
 
   return (
     <div className="rounded-md border">
@@ -67,23 +65,23 @@ export function DataTable<TData, TValue>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableHead>
-                );
-              })}
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                </TableHead>
+              ))}
             </TableRow>
           ))}
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
+              <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -100,27 +98,38 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-      <div className="flex items-center justify-end space-x-2 p-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <span className="text-sm">
-          Page {pagination.pageIndex + 1} of {table.getPageCount()}
-        </span>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
-      </div>
+      {totalCount > 0 && (
+        <div className="flex items-center justify-center m-2">     
+          <div className="flex items-center space-x-4">
+            <Button
+              text="Previous"
+              variant="outline"
+              type="button"
+              containerStyle="px-0"
+              onClick={handlePreviousPage}
+              disabled={!hasPreviousPage}
+              icon={
+                <ChevronLeft className="h-4 w-4" />
+              }
+            />
+            <div className="text-sm font-medium text-center w-xs">
+              Page {currentPage} of {totalPages}
+            </div>
+            
+            <Button
+              text="Next"
+              type="button"
+              variant="outline"
+              containerStyle="px-0"
+              onClick={handleNextPage}
+              disabled={!hasNextPage}
+              icon={
+                <ChevronRight className="h-4 w-4" />
+              }
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
