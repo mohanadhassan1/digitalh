@@ -5,13 +5,12 @@ import { ProductForm } from "@/components/products/ProductForm";
 import { ViewDialog } from "@/components/products/ViewDialog";
 import { DeleteDialog } from "@/components/products/DeleteDialog";
 
-
 interface ProductsPageProps {
-  searchParams: { 
+  searchParams: Promise<{
     [key: string]: string | string[] | undefined;
     search?: string;
     page?: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({ searchParams }: ProductsPageProps) {

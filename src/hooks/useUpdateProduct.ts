@@ -3,6 +3,7 @@ import { updateProduct } from "@/lib/api/api-client";
 import { ProductUpdatePayload } from "@/lib/models/product";
 import { showToast } from "@/lib";
 import { TOAST_TYPES } from "@/enums";
+import { getErrorMessage } from "@/lib/models/error";
 
 export function useUpdateProduct() {
   const queryClient = useQueryClient();
@@ -15,12 +16,10 @@ export function useUpdateProduct() {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       showToast(TOAST_TYPES.SUCCESS, "Product updated successfully");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error("Failed to update product:", error);
-      showToast(
-        TOAST_TYPES.ERROR, 
-        error?.response?.data?.message || "Failed to update product"
-      );
+      const errorMessage = getErrorMessage(error);
+      showToast(TOAST_TYPES.ERROR, errorMessage);
     },
   });
 

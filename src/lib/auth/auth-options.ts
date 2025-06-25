@@ -16,14 +16,14 @@ export const authOptions: NextAuthOptions = {
             email: "admin@example.com",
             password: "admin123",
             name: "Admin User",
-            role: "admin",
+            role: "admin" as const,
           },
           {
             id: "2",
             email: "user@example.com",
             password: "user123",
             name: "Regular User",
-            role: "user",
+            role: "user" as const,
           },
         ];
         const user = users.find(

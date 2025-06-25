@@ -3,6 +3,7 @@ import { createProduct } from "@/lib/api/api-client";
 import { ProductCreatePayload } from "@/lib/models/product";
 import { showToast } from "@/lib";
 import { TOAST_TYPES } from "@/enums";
+import { getErrorMessage } from "@/lib/models/error";
 
 export function useCreateProduct() {
   const queryClient = useQueryClient();
@@ -14,12 +15,10 @@ export function useCreateProduct() {
       queryClient.setQueryData(["product", newProduct.id], newProduct);
       showToast(TOAST_TYPES.SUCCESS, "Product created successfully");
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error("Failed to create product:", error);
-      showToast(
-        TOAST_TYPES.ERROR, 
-        error?.response?.data?.message || "Failed to create product"
-      );
+      const errorMessage = getErrorMessage(error);
+      showToast(TOAST_TYPES.ERROR, errorMessage);
     },
   });
 
