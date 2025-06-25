@@ -1,41 +1,27 @@
 "use client";
 
-import { IProduct } from "@/lib/models/product";
 import { DataTable } from "@/UI/data-table";
 import { ProductTableHeader } from "./ProductTableHeader";
 import { ProductTableLoading } from "./ProductTableLoading";
 import { ProductTableEmptyState } from "./ProductTableEmptyState";
 import { useProductTable } from "@/hooks/useProductTable";
 import { productTableColumns } from "./productTableColumns";
+import { useSearchParams } from "next/navigation";
 
-interface ProductTableProps {
-  products?: IProduct[];
-  totalCount?: number;
-  pageSize?: number;
-}
-
-export function ProductTable({ 
-  products: propProducts, 
-  totalCount: propTotalCount,
-  pageSize = 10
-}: ProductTableProps) {
-  const {
-    products,
-    totalCount,
+export function ProductTable() {
+  
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('search') || undefined;
+  const page = parseInt(searchParams.get('page') || '1');
+  const pageSize = 10;
+    
+  const { products, totalCount, isLoading, isFetching, handleSearch, handleAddProduct } = useProductTable({ 
     searchQuery,
-    isLoadingInitial,
-    isFetching,
-    isEmpty,
-    handleSearch,
-    handleAddProduct,
-  } = useProductTable({ 
-    propProducts, 
-    propTotalCount, 
-    pageSize 
+    offset: (page - 1) * pageSize,
+    limit: pageSize,
   });
 
-  // Show loading skeleton on initial load
-  if (isLoadingInitial) {
+  if (isLoading) {
     return <ProductTableLoading />;
   }
 
@@ -55,11 +41,8 @@ export function ProductTable({
         pageSize={pageSize}
       />
 
-      {isEmpty && (
-        <ProductTableEmptyState
-          searchQuery={searchQuery}
-          onAddProduct={handleAddProduct}
-        />
+      {products.length === 0 && (
+        <ProductTableEmptyState searchQuery={searchQuery} onAddProduct={handleAddProduct} />
       )}
     </div>
   );

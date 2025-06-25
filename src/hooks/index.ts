@@ -14,5 +14,6 @@ export type { UseUpdateProductReturn } from './useUpdateProduct';
 export { useDeleteProduct } from './useDeleteProduct';
 export type { UseDeleteProductReturn } from './useDeleteProduct';
 
+export { useCategories } from './useCategories';
 
 export { useSessionSync } from './useSessionSync';

@@ -16,10 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getProducts } from "@/lib/api/api-client";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,30 +29,23 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  totalCount,
   pageSize,
+  totalCount = 0,
 }: DataTableProps<TData, TValue>) {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const page = parseInt(searchParams.get('page') || '1');
+
   const [pagination, setPagination] = useState({
-    pageIndex: 0,
+    pageIndex: page - 1,
     pageSize,
   });
 
-  const { data: queryData, isLoading } = useQuery({
-    queryKey: ["products", searchParams, pagination],
-    queryFn: () =>
-      getProducts({
-        title: searchParams.get("search") || undefined,
-        offset: pagination.pageIndex * pagination.pageSize,
-        limit: pagination.pageSize,
-      }),
-    initialData: { data, totalCount },
-  });
 
   const table = useReactTable({
-    data: queryData.data,
+    data,
     columns,
-    pageCount: Math.ceil(queryData.totalCount / pagination.pageSize),
+    pageCount: Math.ceil(totalCount / pageSize),
     state: {
       pagination,
     },
@@ -63,6 +54,12 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', String(pagination.pageIndex + 1));
+    router.replace(`?${params.toString()}`);
+  }, [pagination.pageIndex, router, searchParams]);
 
   return (
     <div className="rounded-md border">
@@ -73,12 +70,10 @@ export function DataTable<TData, TValue>({
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                   </TableHead>
                 );
               })}
@@ -88,11 +83,7 @@ export function DataTable<TData, TValue>({
         <TableBody>
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-                className="hover:bg-gray-50"
-              >
+              <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -103,7 +94,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                {isLoading ? "Loading..." : "No results"}
+                No results
               </TableCell>
             </TableRow>
           )}
@@ -118,6 +109,9 @@ export function DataTable<TData, TValue>({
         >
           Previous
         </Button>
+        <span className="text-sm">
+          Page {pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
         <Button
           variant="outline"
           size="sm"

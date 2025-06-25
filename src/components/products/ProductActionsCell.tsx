@@ -11,7 +11,6 @@ import {
 import { MoreHorizontal, Trash2, Edit, Eye, Loader2 } from "lucide-react";
 import { useProductStore } from "@/lib/store/product-store";
 import { useDeleteProduct } from "@/hooks";
-import { useState } from "react";
 
 interface ProductActionsCellProps {
   product: IProduct;
@@ -19,22 +18,11 @@ interface ProductActionsCellProps {
 
 export function ProductActionsCell({ product }: ProductActionsCellProps) {
   const { setSelectedProduct, setViewDialogOpen, setEditDialogOpen } = useProductStore();
-  const { deleteProduct, isDeleting } = useDeleteProduct();
-  const [isDeletingThis, setIsDeletingThis] = useState(false);
+  const deleteMutation = useDeleteProduct();
   
   const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete "${product.title}"?`)) {
-      return;
-    }
-
-    setIsDeletingThis(true);
-    try {
-      deleteProduct(product.id);
-    } catch (error) {
-      console.error("Failed to delete product:", error);
-    } finally {
-      setIsDeletingThis(false);
-    }
+    if (!confirm(`Delete "${product.title}"?`)) return;
+    await deleteMutation.mutateAsync(product.id);
   };
 
   const handleView = () => {
@@ -46,8 +34,6 @@ export function ProductActionsCell({ product }: ProductActionsCellProps) {
     setSelectedProduct(product);
     setEditDialogOpen(true);
   };
-
-  const isLoading = isDeletingThis || isDeleting;
 
   return (
     <DropdownMenu>
@@ -67,15 +53,15 @@ export function ProductActionsCell({ product }: ProductActionsCellProps) {
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={handleDelete}
-          disabled={isLoading}
+          disabled={deleteMutation.isPending}
           className="text-red-600 focus:text-red-600"
         >
-          {isLoading ? (
+          {deleteMutation.isPending ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
             <Trash2 className="mr-2 h-4 w-4" />
           )}
-          {isLoading ? "Deleting..." : "Delete"}
+          {deleteMutation.isPending ? "Deleting..." : "Delete"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

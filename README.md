@@ -37,23 +37,33 @@ DIGITALH-DASHBOARD/
 │   │   │   ├── products/
 │   │   │   │   └── page.tsx
 │   │   │   ├── layout.tsx
-│   │   │   ├── page.tsx
+│   │   │   └── page.tsx
 │   │   ├── api/
+│   │   │   ├── admin/
+│   │   │   │   └── route.ts
 │   │   │   ├── auth/
 │   │   │   │   ├── [...nextauth]/
 │   │   │   │   │   └── route.ts
-# │   │   ├── 404.tsx
-# │   │   ├── 500.tsx
+│   │   ├── unauthorized/
+│   │   │   └── page.tsx
 │   │   ├── error.tsx
 │   │   ├── favicon.ico
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── not-found.tsx
 │   ├── components/
+│   │   │── auth/
+│   │   │   ├── with-role.tsx
 │   │   │── products/
-│   │   │   ├── ProductTable.tsx
-│   │   │   ├── ProductForm.tsx
 │   │   │   ├── DeleteDialog.tsx
+│   │   │   ├── ProductActionsCell.tsx
+│   │   │   ├── ProductForm.tsx
+│   │   │   ├── ProductSearchBar.tsx
+│   │   │   ├── ProductTable.tsx
+│   │   │   ├── ProductTableColumns.tsx
+│   │   │   ├── ProductTableEmptyState.tsx
+│   │   │   ├── ProductTableHeader.tsx
+│   │   │   ├── ProductTableLoading.tsx
 │   │   │   ├── ViewDialog.tsx
 │   │   │── shared/
 │   │   │   ├── Navbar.tsx
@@ -71,27 +81,32 @@ DIGITALH-DASHBOARD/
 │   │   │   ├── switch.tsx
 │   │   │   └── table.tsx
 │   │   │   ├── textarea.tsx
+│   ├── constants/
+│   │   └── images.tsx
 │   ├── enums/
 │   │   └── index.ts
 │   ├── hooks/
 │   │   ├── index.ts
-│   │   ├── useAuth.ts
+│   │   ├── useCategories.ts
+│   │   ├── useCreateProduct.ts
+│   │   ├── useDeleteProduct.ts
+│   │   ├── useProduct.ts
 │   │   ├── useProducts.ts
+│   │   ├── useProductTable.ts
 │   │   ├── useSessionSync.ts
+│   │   ├── useUpdateProduct.ts
 │   ├── lib/
 │   │   ├── api/
 │   │   │   └── api-client.ts
 │   │   │   └── axios-client.ts
 │   │   ├── auth/
 │   │   │   └── auth-options.ts
-│   │   ├── constants/
-│   │   │   └── route.ts
 │   │   ├── models/
-│   │   │   └── api.ts
-│   │   │   └── auth.ts
-│   │   │   └── index.ts
-│   │   │   └── product.ts
-│   │   │   └── table.ts
+│   │   │   ├── api.ts
+│   │   │   ├── auth.ts
+│   │   │   ├── index.ts
+│   │   │   ├── product.ts
+│   │   │   ├── table.ts
 │   │   │   └── utils.ts
 │   │   ├── store/
 │   │   │   └── auth-store.ts

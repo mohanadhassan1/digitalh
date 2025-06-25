@@ -6,12 +6,21 @@ const axiosClient = axios.create({
 
 // Add interceptors for request and response
 axiosClient.interceptors.request.use(
-  (config) => {
-    // You can add auth tokens here if needed
-    return config;
-  },
+  (response) => response,
   (error) => {
-    return Promise.reject(error);
+    let errorMessage = "An error occurred";
+    
+    if (error.response) {
+      errorMessage = error.response.data?.message || error.response.statusText;
+    } else if (error.request) {
+      errorMessage = "No response received from server";
+    }
+
+    return Promise.reject({
+      message: errorMessage,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
   }
 );
 

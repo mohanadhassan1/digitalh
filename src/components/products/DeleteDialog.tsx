@@ -3,33 +3,23 @@
 import { useProductStore } from "@/lib/store/product-store";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Button } from "../ui/button";
-import { deleteProduct } from "@/lib/api/api-client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TOAST_TYPES } from "@/enums";
-import { showToast } from "@/lib";
+import { useDeleteProduct } from "@/hooks";
 
 export function DeleteDialog() {
-  const {
-    selectedProduct,
-    isDeleteDialogOpen,
-    setDeleteDialogOpen,
-    setSelectedProduct,
-  } = useProductStore();
-  const queryClient = useQueryClient();
+  const { selectedProduct, isDeleteDialogOpen, setDeleteDialogOpen, setSelectedProduct } = useProductStore();
+  const deleteMutation = useDeleteProduct();
 
-  const deleteMutation = useMutation({
-    mutationFn: () => deleteProduct(selectedProduct?.id || 0),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["products"] });
-      showToast(TOAST_TYPES.SUCCESS, "Product deleted successfully")
-      setDeleteDialogOpen(false);
-      setSelectedProduct(null);
-    },
-    onError: (error) => {
-      showToast(TOAST_TYPES.ERROR, "Failed to delete product")
-      console.error(error);
-    },
-  });
+  const handleDelete = async () => {
+    if (selectedProduct?.id) {
+      try {
+        await deleteMutation.mutateAsync(selectedProduct.id);
+        setDeleteDialogOpen(false);
+        setSelectedProduct(null);
+      } catch (error) {
+        console.error("Delete error:", error);
+      }
+    }
+  };
 
   if (!selectedProduct) return null;
 
@@ -41,19 +31,20 @@ export function DeleteDialog() {
         </DialogHeader>
         <div className="space-y-4">
           <p>
-            Are you sure you want to delete <strong>{selectedProduct.title}</strong>?
+            Are you sure you want to delete <strong>{selectedProduct?.title}</strong>?
             This action cannot be undone.
           </p>
           <div className="flex justify-end gap-2">
             <Button
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
+              disabled={deleteMutation.isPending}
             >
               Cancel
             </Button>
             <Button
               variant="destructive"
-              onClick={() => deleteMutation.mutate()}
+              onClick={handleDelete}
               disabled={deleteMutation.isPending}
             >
               {deleteMutation.isPending ? "Deleting..." : "Delete"}

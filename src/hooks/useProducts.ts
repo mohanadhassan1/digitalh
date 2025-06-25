@@ -1,72 +1,33 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getProduct, getProducts } from "@/lib/api/api-client";
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "@/lib/api/api-client";
 import { IProduct, ProductQueryParams } from "@/lib/models/product";
 
+interface ProductsResponse {
+  data: IProduct[];
+  total: number;
+}
+
 export function useProducts(params?: ProductQueryParams) {
-  const queryClient = useQueryClient();
-  
-  // Query key factory for consistent caching
-  const getQueryKey = (queryParams?: ProductQueryParams) => 
-    ["products", queryParams || {}];
-
-  /**
-   * Fetch products with optional filtering and pagination
-   */
   const {
-    data: products = [],
-    isLoading,
-    isError,
-    error,
-    refetch,
-    isFetching
-  } = useQuery({
-    queryKey: getQueryKey(params),
-    queryFn: () => getProducts(params),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
-  });
-
-  /**
-   * Prefetch product for optimistic navigation
-   */
-  const prefetchProduct = (id: number) => {
-    queryClient.prefetchQuery({
-      queryKey: ["product", id],
-      queryFn: () => getProduct(id),
-      staleTime: 5 * 60 * 1000,
-    });
-  };
-
-  /**
-   * Invalidate all product queries
-   */
-  const invalidateProducts = () => {
-    queryClient.invalidateQueries({ queryKey: ["products"] });
-  };
-
-  /**
-   * Get cached product data without triggering a request
-   */
-  const getCachedProduct = (id: number): IProduct | undefined => {
-    return queryClient.getQueryData(["product", id]);
-  };
-
-  return {
-    // Data
-    products,
-    totalCount: products.length, // Note: API doesn't return total count
-    
-    // Loading states
+    data = { data: [], total: 0 },
     isLoading,
     isFetching,
-    isError,
     error,
-    
-    // Utility functions
-    refetch,
-    prefetchProduct,
-    invalidateProducts,
-    getCachedProduct,
+  } = useQuery<ProductsResponse>({
+    queryKey: ['products', params],
+    queryFn: () => getProducts({
+      ...params,
+      // sortBy: 'creationAt',
+      // sortOrder: 'desc'
+    }),
+  });
+
+  return {
+    products: data.data,
+    totalCount: data.total,
+    isLoading,
+    isFetching,
+    error
   };
 }
 

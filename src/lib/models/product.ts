@@ -11,7 +11,7 @@ export interface IProduct {
     updatedAt?: string;
   };
   images: string[];
-  creationAt?: string;
+  creationAt: string;
   updatedAt?: string;
 }
 
@@ -25,6 +25,14 @@ export interface ProductFormValues {
 
 export type ProductCreatePayload = Omit<ProductFormValues, "id">;
 export type ProductUpdatePayload = Partial<ProductCreatePayload>;
+
+export interface ICategory {
+  id: number;
+  name: string;
+  image: string;
+  creationAt?: string;
+  updatedAt?: string;
+}
 
 export interface ProductQueryParams {
   title?: string;

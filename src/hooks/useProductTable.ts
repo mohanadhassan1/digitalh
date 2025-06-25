@@ -7,23 +7,31 @@ interface UseProductTableProps {
   propProducts?: IProduct[];
   propTotalCount?: number;
   pageSize?: number;
+  searchQuery?: string;
+  offset?: number;
+  limit?: number;
 }
 
 export function useProductTable({ 
   propProducts, 
   propTotalCount, 
-  pageSize = 10 
+  pageSize = 10,
+  searchQuery: initialSearchQuery,
+  offset: initialOffset,
+  limit: initialLimit,
 }: UseProductTableProps = {}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setAddDialogOpen } = useProductStore();
 
-  // URL parameters
-  const searchQuery = searchParams.get("search") || undefined;
-  const page = parseInt(searchParams.get("page") || "1");
-  const offset = (page - 1) * pageSize;
+  const urlSearchQuery = searchParams.get("search") || undefined;
+  const urlPage = parseInt(searchParams.get("page") || "1");
 
-  // Fetch products using hook
+  const searchQuery = initialSearchQuery ?? urlSearchQuery;
+  const page = initialOffset !== undefined ? Math.floor(initialOffset / pageSize) + 1 : urlPage;
+  const offset = initialOffset ?? (page - 1) * pageSize;
+  const limit = initialLimit ?? pageSize;
+
   const {
     products: hookProducts,
     totalCount: hookTotalCount,
@@ -32,14 +40,12 @@ export function useProductTable({
   } = useProducts({
     title: searchQuery,
     offset,
-    limit: pageSize,
+    limit,
   });
 
-  // Use prop data if provided, otherwise use hook data
   const products = propProducts || hookProducts;
   const totalCount = propTotalCount || hookTotalCount;
 
-  // Handlers
   const handleSearch = (term: string) => {
     const params = new URLSearchParams(searchParams);
     if (term) {
@@ -47,7 +53,7 @@ export function useProductTable({
     } else {
       params.delete("search");
     }
-    params.delete("page"); // Reset to first page on search
+    params.delete("page");
     router.replace(`/products?${params.toString()}`);
   };
 
@@ -56,24 +62,15 @@ export function useProductTable({
   };
 
   return {
-    // Data
     products,
     totalCount,
-    
-    // UI state
     searchQuery,
     page,
     pageSize,
-    
-    // Loading states
     isLoading,
     isFetching,
-    
-    // Handlers
     handleSearch,
     handleAddProduct,
-    
-    // Computed states
     isEmpty: products.length === 0,
     isLoadingInitial: isLoading && products.length === 0,
   };
