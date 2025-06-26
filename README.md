@@ -1,26 +1,106 @@
+# 🚀 DIGITALH Dashboard – Frontend Challenge
 
-Installation:
+Welcome to the DIGITALH Frontend Challenge! This project is a CRUD operations dashboard built with Next.js, TypeScript, Zustand, NextAuth.js, and Shadcn UI. It demonstrates advanced UI/UX features like pagination, filtering, server-side rendering, and more.
+
+🚀 Live Demo
+<a href="https://digitalh-six.vercel.app" target="_blank">View Live Demo</a>
+
+---
+
+## 📚 Table of Contents
+
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Installation](#installation)
+- [Project Structure](#project-structure)
+- [API](#api)
+- [Bonus Points](#bonus-points)
+- [Submission](#submission)
+
+---
+
+## 🔍 Overview
+
+This challenge simulates a real-world dashboard used for managing products. It includes authentication, advanced product management (CRUD), UI components, reusable patterns, and scalable code structure.
+
+---
+
+
+## ⚙️ Tech Stack
+
+- [Next.js](https://nextjs.org/)
+- [Shadcn UI](https://ui.shadcn.com/)
+- [NextAuth.js](https://next-auth.js.org/)
+- [Zustand](https://github.com/pmndrs/zustand)
+- [React Query](https://tanstack.com/query/latest)
+- [Zod](https://zod.dev/) (optional for form validation)
+- [Axios](https://axios-http.com/)
+- [TailwindCSS](https://tailwindcss.com/)
+
+---
+
+## ✨ Features
+
+### 🔑 Authentication
+- Email/password login using NextAuth.js
+- Redirect after login
+- Unauthorized access handling
+
+### 📊 Products Dashboard
+- Products table with **edit**, **delete**, and **view** buttons
+- Server-side filtering and search (via query params)
+- Server-side pagination
+- Column sorting
+- Responsive design with hover states and modals
+
+### ➕ Add Product
+- Modal-based form
+- Validated using Zod
+
+### ✏️ Edit Product
+- Modal with pre-filled form
+- Edit and update functionality
+
+### 🗑️ Delete Product
+- Confirmation dialog
+- Removes product on confirmation
+
+### 🔍 View Product Details
+- Modal view with all product information
+
+---
+
+## 💾 Installation
+
+> Prerequisites:
+- Node.js 18.x or higher
+- npm or yarn installed
+
 npm i @tanstack/react-query @tanstack/react-table @tanstack/react-query-devtools
-
 npm i axios zustand 
-
 npx shadcn@latest add table button input dialog data-table badge
 npm i @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-slot
-
 npm i class-variance-authority clsx tailwind-merge 
 npm i lucide-react
-
 npm i next-auth
-
 npm i react-hook-form @hookform/resolvers zod
-
 npm i react-toastify
-
 npm i use-debounce
 
+```bash
+git clone https://github.com/mohanadhassan1/digitalh.git
+cd digitalh-dashboard
 
-Structure:
-## Project Structure
+# Install all dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+---
+## 📚 Project Structure
 
 ```bash
 DIGITALH-DASHBOARD/
@@ -134,3 +214,28 @@ DIGITALH-DASHBOARD/
 ├── README.md
 ├── tsconfig.json
 ```
+
+---
+
+## 🌐 API
+
+This project uses mocked endpoints from:
+https://fakeapi.platzi.com/
+
+---
+
+## 🚀 Bonus Points Implemented
+
+✅ TypeScript support
+✅ Axios Interceptors
+✅ React Query for API state management
+✅ Reusable components
+✅ Scalable project structure
+✅ SOLID principles
+✅ GitHub feature branches
+
+---
+
+## 📌 Submission
+✅ Live demo deployed on Vercel: <a href="https://digitalh-six.vercel.app" target="_blank">View Live Demo</a>
+✅ Public GitHub Repo: <a href="https://github.com/mohanadhassan1/digitalh.git" target="_blank">GitHub URL</a>
