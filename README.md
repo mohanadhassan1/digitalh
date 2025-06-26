@@ -4,7 +4,7 @@ npm i @tanstack/react-query @tanstack/react-table @tanstack/react-query-devtools
 
 npm i axios zustand 
 
-npx shadcn@latest add chart table button input switch select dropdown-menu dialog form textarea data-table badge
+npx shadcn@latest add table button input dialog data-table badge
 npm i @radix-ui/react-dialog @radix-ui/react-dropdown-menu @radix-ui/react-slot
 
 npm i class-variance-authority clsx tailwind-merge 
@@ -27,7 +27,6 @@ DIGITALH-DASHBOARD/
 ├── .next/
 ├── node_modules/
 ├── public/
-│   └── images/
 ├── src/
 │   ├── app/
 │   │   ├── (auth)/
@@ -63,23 +62,16 @@ DIGITALH-DASHBOARD/
 │   │   │   ├── ProductTableColumns.tsx
 │   │   │   ├── ProductTableEmptyState.tsx
 │   │   │   ├── ProductTableHeader.tsx
-│   │   │   ├── ProductTableLoading.tsx
 │   │   │   ├── ViewDialog.tsx
 │   │   │── shared/
 │   │   │   ├── Navbar.tsx
 │   │   │── ui/
 │   │   │   ├── badge.tsx
 │   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
 │   │   │   ├── dialog.tsx
 │   │   │   ├── dropdown-menu.tsx
-│   │   │   ├── form.tsx
 │   │   │   ├── input.tsx
-│   │   │   ├── label.tsx
-│   │   │   ├── select.tsx
-│   │   │   ├── switch.tsx
 │   │   │   └── table.tsx
-│   │   │   ├── textarea.tsx
 │   ├── constants/
 │   │   └── images.tsx
 │   ├── enums/
@@ -103,6 +95,7 @@ DIGITALH-DASHBOARD/
 │   │   ├── models/
 │   │   │   ├── api.ts
 │   │   │   ├── auth.ts
+│   │   │   ├── error.ts
 │   │   │   ├── index.ts
 │   │   │   ├── product.ts
 │   │   │   ├── table.ts
@@ -122,7 +115,6 @@ DIGITALH-DASHBOARD/
 │   │   ├── data-table.tsx
 │   │   ├── EmptyComponent.tsx
 │   │   ├── Loading.tsx
-│   │   ├── RadioInput.tsx
 │   │   ├── SelectInput.tsx
 │   │   └── TextInput.tsx
 │   ├── utils/

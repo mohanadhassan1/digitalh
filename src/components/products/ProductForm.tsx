@@ -124,7 +124,6 @@ export function ProductForm() {
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <TextInput
-            key={PRODUCT.TITLE}
             label={PRODUCT.TITLE}
             type="text"
             placeholder={(PRODUCT.TITLE).toLowerCase()}
@@ -187,7 +186,7 @@ export function ProductForm() {
                   <Button
                     textStyle="hidden"
                     type="button"
-                    variant="default"
+                    variant="outline"
                     containerStyle="w-fit"
                     icon={<IMAGES.ICONS.x />}
                     onClick={() => removeImageUrl(index)}
@@ -196,10 +195,12 @@ export function ProductForm() {
                 </div>
               ))}
               <Button
-                text="Add Another Image"
                 type="button"
-                variant="outline"
+                variant="default"
                 onClick={addImageUrl}
+                containerStyle="w-fit"
+                textStyle="hidden"
+                icon={<IMAGES.ICONS.plus />}
               />
             </div>
             {errors.images && (

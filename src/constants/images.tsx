@@ -7,5 +7,20 @@ export const IMAGES = {
         </svg>
       </>
     ),
+    plus: () => (
+      <>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </>
+    ),
+    shirt: () => (
+      <>
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M16.5 3h-3v1.5h3V3zm-3 1.5h-3V3h3v1.5zM7.5 3v1.5h3V3h-3zM5 8.5l1.5-3h11l1.5 3V21H5V8.5zm2 1.5v10h10v-10H7z"/>
+        </svg>
+      </>
+    ),
   }
 }

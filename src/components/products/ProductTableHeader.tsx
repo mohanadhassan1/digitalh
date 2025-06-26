@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "../ui/button";
+import Button from "@/UI/Button";
 import { ProductSearchBar } from "./ProductSearchBar";
 
 interface ProductTableHeaderProps {
@@ -23,9 +23,13 @@ export function ProductTableHeader({
         isFetching={isFetching}
         onSearch={onSearch}
       />
-      <Button onClick={onAddProduct}>
-        Add Product
-      </Button>
+      <Button 
+        text="Add Product"
+        type="button"
+        variant="default"
+        onClick={onAddProduct}
+        containerStyle="w-fit"
+      />
     </div>
   );
 }

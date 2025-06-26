@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { loginSchema } from "@/utils";
 import { LoginFormData } from "@/lib/models";
+import TextInput from "@/UI/TextInput";
+import Button from "@/UI/Button";
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,37 +52,30 @@ export default function LoginPage() {
           <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">{error}</div>
         )}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register("email")}
-              className={errors.email ? "border-red-500" : ""}
-              disabled={isLoading}
-              required
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-            )}
-          </div>
-          <div>
-            <Label htmlFor="password">Password</Label>
-            <Input
-              id="password"
-              type="password"
-              {...register("password")}
-              className={errors.password ? "border-red-500" : ""}
-              disabled={isLoading}
-              required
-            />
-            {errors.password && (
-              <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
-            )}
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Signing in..." : "Sign In"}
-          </Button>
+          <TextInput
+            label="Email"
+            type="email"
+            placeholder="Email"
+            ID="email"
+            errors={errors}
+            register={register}
+          />
+          <TextInput
+            label="Password"
+            type="password"
+            placeholder="Password"
+            ID="password"
+            errors={errors}
+            register={register}
+          />
+          <Button
+            text={isLoading ? "Signing in..." : "Sign In"}
+            variant="default" 
+            type="submit"
+            containerStyle="bg-black hover:bg-gray-900"
+            loading={isLoading}
+            disabled={isLoading} 
+          />
         </form>
 
         <div className="mt-4 text-sm text-gray-600">

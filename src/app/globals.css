@@ -4,6 +4,22 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: "Satoshi", "sans-serif";
+  --font-mono: "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Courier New", monospace;
+
+  --color-background: #F4F4F4;
+  --color-foreground: #171717;
+  --color-primary: #D22727;
+  --color-secondary: #3B6790;
+
+
+  --color-bgWhite: #FFFFFF;
+  --color-bgGray: #F8F8F8;
+  --color-bgRed: #D22727;
+  --color-Full: #FBFBFB;
+  --color-borderBlueColor: #E6EDFF;
+  --color-borderGrayColor: #EEEEEE;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -112,6 +128,18 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -119,4 +147,73 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Global styles or in a dedicated CSS file */
+.custom-scrollbar {
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  /* For Firefox */
+  scrollbar-color: #D22727 #d1d5db;
+  /* For Firefox */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #D22727;
+  width: 8px;
+  /* Width of the scrollbar thumb */
+  height: 8px;
+  /* Color of the scrollbar thumb */
+  /* border-radius: 9999px; Rounded corners for the thumb */
+  border-radius: 6px;
+  border: 3px solid transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #D22727;
+  /* Track (background) color */
+}
+
+/* .custom-scroll-container {
+  @apply custom-scrollbar overflow-auto;
+} */
+
+/* Custom scrollbar styles for webkit browsers (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 12px;
+  /* Width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* Color of the scrollbar track (background of the scrollbar) */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #D22727;
+  /* Scrollbar color (e.g., indigo for Tailwind theme) */
+  border-radius: 20px;
+  /* Round the scroll thumb */
+  border: 3px solid #f1f1f1;
+  /* Space around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #D22727;
+  /* Darker color when hovered */
+}
+
+/* Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D22727 #f1f1f1;
+  /* Thumb color and background color */
 }

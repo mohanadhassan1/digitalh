@@ -15,14 +15,14 @@ export const authOptions: NextAuthOptions = {
             id: "1",
             email: "admin@example.com",
             password: "admin123",
-            name: "Admin User",
+            name: "Admin",
             role: "admin" as const,
           },
           {
             id: "2",
             email: "user@example.com",
             password: "user123",
-            name: "Regular User",
+            name: "User",
             role: "user" as const,
           },
         ];

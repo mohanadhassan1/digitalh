@@ -5,7 +5,7 @@ import QueryProvider from "@/providers/QueryProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth/auth-options";
-// import { UserSession } from "@/lib/models";
+import { ToastProvider } from "@/lib";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +28,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await getServerSession(authOptions);
-  // const session = await getServerSession(authOptions) as UserSession;
 
   return (
     <html lang="en">
@@ -36,6 +35,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider session={session}>
+          <ToastProvider />
           <QueryProvider>{children}</QueryProvider>
         </AuthProvider>
       </body>

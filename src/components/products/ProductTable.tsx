@@ -2,11 +2,11 @@
 
 import { DataTable } from "@/UI/data-table";
 import { ProductTableHeader } from "./ProductTableHeader";
-import { ProductTableLoading } from "./ProductTableLoading";
 import { ProductTableEmptyState } from "./ProductTableEmptyState";
 import { useProductTable } from "@/hooks/useProductTable";
 import { productTableColumns } from "./productTableColumns";
 import { useRouter, useSearchParams } from "next/navigation";
+import Loading from "@/UI/Loading";
 
 export function ProductTable() {
   const router = useRouter();
@@ -32,7 +32,7 @@ export function ProductTable() {
   };
 
   if (isLoading) {
-    return <ProductTableLoading />;
+    return <Loading />;
   }
 
   return (
